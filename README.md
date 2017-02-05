@@ -1,2 +1,2 @@
 # snake
-Snake with C++
+Console snake with C++
