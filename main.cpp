@@ -177,22 +177,6 @@ void move_snake() {
         _x = last_x;
         _y = last_y;
     }
-
-    // если голова змейки находится на тех же координатах что и еда
-    // тогда добавляем часть тела в конец змейки
-    // и генерируем новую еду
-    if (snake_ate_food()) {
-        generate_food_coord();
-        generate_food_symbol();
-
-        snake_body snake_peace;
-        snake_peace.y = snake[snake.size()-1].y;
-        snake_peace.x = snake[snake.size()-1].x;
-
-        snake.push_back(snake_peace);
-
-        SCORE += 7;
-    }
 }
 
 /// Фк-ция выполнится после нажатия Esc.
@@ -248,6 +232,24 @@ int main () {
 
         move_snake();
 
+        // если голова змейки находится на тех же координатах что и еда
+        // тогда добавляем часть тела в конец змейки
+        // и генерируем новую еду
+        if (snake_ate_food()) {
+            generate_food_coord();
+            generate_food_symbol();
+
+            snake_body snake_peace;
+            snake_peace.y = snake[snake.size()-1].y;
+            snake_peace.x = snake[snake.size()-1].x;
+
+            snake.push_back(snake_peace);
+
+            SCORE += 7;
+        }
+
+        // если змейка съела сама себя или вышла за границы карты
+        // тогда фэил
         if (is_out_of_border() || snake_eats_itself()) {
             exit();
             break;
