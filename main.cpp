@@ -9,6 +9,8 @@ const int DIRECTION_RIGHT = 2;
 const int DIRECTION_UP = 3;
 const int DIRECTION_DOWN = 4;
 
+int SCORE = 0;
+
 // текущее направление змейки
 int DIRECTION = DIRECTION_DOWN;
 
@@ -80,6 +82,11 @@ bool snake_ate_food() {
     return false;
 }
 
+/// Проверяет, врезалась ли змейка в стену.
+bool is_out_of_border() {
+    return snake[0].x == 0 || snake[0].y == 0 || snake[0].x == MAP_WIDTH || snake[0].y == MAP_HEIGHT;
+}
+
 /// Генерирует новые координаты для еды.
 void generate_food_coord() {
     srand( time( 0 ) );
@@ -91,6 +98,11 @@ void generate_food_coord() {
 /// Генерирует новый символ еды.
 void generate_food_symbol() {
     FOOD_SYMBOL_NUM = rand() % sizeof(FOOD_SYMBOLS);
+}
+
+/// Печатает кол-во очков.
+void print_score() {
+    printf("\n###### SCORE: %d ######\n\n", SCORE);
 }
 
 /// Рисует карту со змейкой.
@@ -117,6 +129,8 @@ void draw() {
 
         cout << "\n";
     }
+
+    print_score();
 }
 
 /// Передвигает змейку и все части её тела.
@@ -159,6 +173,8 @@ void move_snake() {
         snake_peace.x = snake[0].x;
 
         snake.push_back(snake_peace);
+
+        SCORE += 7;
     }
 }
 
@@ -214,6 +230,12 @@ int main () {
         }
 
         move_snake();
+
+        if (is_out_of_border()) {
+            exit();
+            break;
+        }
+
         draw();
 
         usleep(100000);
