@@ -43,11 +43,28 @@ vector<snake_body> snake;
 void init_snake() {
     for (int i(0); i < 5; i++) {
         snake_body body;
-        body.x = 5;
-        body.y = 3 + i;
+        body.x = -10;
+        body.y = -10;
 
         snake.push_back(body);
     }
+
+    snake[0].x = 5;
+    snake[0].y = 3;
+}
+
+/// Проверяет, съела ли змейка сама себя.
+bool snake_eats_itself() {
+    int head_x = snake[0].x;
+    int head_y = snake[0].y;
+
+    for (int i(1); i < snake.size(); i++) {
+        if (snake[i].x == head_x && snake[i].y == head_y) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /// Проверяет, есть ли по указанным координатам часть тела змейки.
@@ -169,8 +186,8 @@ void move_snake() {
         generate_food_symbol();
 
         snake_body snake_peace;
-        snake_peace.y = snake[0].y;
-        snake_peace.x = snake[0].x;
+        snake_peace.y = snake[snake.size()-1].y;
+        snake_peace.x = snake[snake.size()-1].x;
 
         snake.push_back(snake_peace);
 
@@ -231,7 +248,7 @@ int main () {
 
         move_snake();
 
-        if (is_out_of_border()) {
+        if (is_out_of_border() || snake_eats_itself()) {
             exit();
             break;
         }
